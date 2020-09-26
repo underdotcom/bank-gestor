@@ -1,11 +1,11 @@
-package model;
+package structures;
 
 public class QueueNode <T> {
 
 	private T data;
-	private Node<T> next;
+	private QueueNode<T> next;
 	
-	public Node(T data) {
+	public QueueNode(T data) {
 		this.data = data;
 		next=null;
 	}
@@ -15,10 +15,10 @@ public class QueueNode <T> {
 	public void setData(T data) {
 		this.data = data;
 	}
-	public Node<T> getNext() {
+	public QueueNode<T> getNext() {
 		return next;
 	}
-	public void setNext(Node<T> next) {
+	public void setNext(QueueNode<T> next) {
 		this.next = next;
 	}
 		

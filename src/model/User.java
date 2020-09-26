@@ -26,23 +26,11 @@ public class User {
 		return cc;
 	}
 
-	public void setId(String cc) {
-		this.cc = cc;
-	}
-
 	public BankAccount getCreditCard() {
 		return creditCard;
 	}
 
-	public void setCreditCard(BankAccount creditCard) {
-		this.creditCard = creditCard;
-	}
-
 	public BankAccount getCurrentAccount() {
 		return currentAccount;
-	}
-
-	public void setCurrentAccount(BankAccount currentAccount) {
-		this.currentAccount = currentAccount;
 	}
 }

@@ -2,19 +2,19 @@ package model;
 
 public abstract class BankAccount {
 
-	private long balanceAvailable;
+	private double balanceAvailable;
 	private String numberAccount;
 	
-	public BankAccount(long balanceAvailable, String numberAccount) {
+	public BankAccount(double balanceAvailable, String numberAccount) {
 		this.balanceAvailable = balanceAvailable;
 		this.numberAccount = numberAccount;
 	}
 	
-	public long getBalanceAvailable() {
+	public double getBalanceAvailable() {
 		return balanceAvailable;
 	}
 	
-	public void setBalanceAvailable(long balanceAvailable) {
+	public void setBalanceAvailable(double balanceAvailable) {
 		this.balanceAvailable = balanceAvailable;
 	}
 	

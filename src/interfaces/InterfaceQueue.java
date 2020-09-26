@@ -1,10 +1,12 @@
-package model;
+package interfaces;
+
+import structures.QueueNode;
 
 public interface InterfaceQueue <T> {
 
-	public Node<T> dequeue();
+	public QueueNode<T> dequeue();
 	public boolean isEmpty() ;
 	public void enqueue(T element); 
-	public Node<T> front();
+	public QueueNode<T> front();
 	
 }

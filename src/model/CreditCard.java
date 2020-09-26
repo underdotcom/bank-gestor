@@ -4,7 +4,9 @@ import java.time.LocalDate;
 
 public class CreditCard extends BankAccount{
 
-	private long balanceOwing;
+	public static final double quota = 5000000;
+	
+	private double balanceOwing;
 	private LocalDate payDate;
 	
 	public CreditCard(long balanceAvailable, String numberAccount, long balanceOwing, LocalDate payDate) {
@@ -13,7 +15,12 @@ public class CreditCard extends BankAccount{
 		this.payDate = payDate;
 	}
 
-	public long getBalanceOwing() {
+	public void pay() {
+		super.setBalanceAvailable(quota);
+		balanceOwing = 0;
+	}
+	
+	public double getBalanceOwing() {
 		return balanceOwing;
 	}
 

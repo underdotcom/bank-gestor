@@ -1,20 +1,27 @@
-package model;
+package structures;
+
+import interfaces.InterfaceQueue;
 
 public class Queue <T> implements InterfaceQueue<T>{
 	
-	private Node<T> front;
-	private Node<T> back;
+	private QueueNode<T> front;
+	private QueueNode<T> back;
 	
-	public Node<T> front(){
+	public Queue() {
+		front = null;
+		back = null;
+	}
+	
+	public QueueNode<T> front(){
 		return front;
 	}
 	
 	@Override
 	public void enqueue(T element) {
-		Node <T> newNode=new Node<T>(element);
-		Node <T> aux= null;
+		QueueNode <T> newNode=new QueueNode<T>(element);
+		QueueNode <T> aux= null;
 		if(front==null) {
-			front=new Node<T>(element);
+			front=new QueueNode<T>(element);
 			back=front;
 		}else if(back.equals(front)){
 			aux=front;	
@@ -36,8 +43,8 @@ public class Queue <T> implements InterfaceQueue<T>{
 	}
 
 	@Override
-	public Node<T> dequeue(){
-		Node<T> aux=null;
+	public QueueNode<T> dequeue(){
+		QueueNode<T> aux=null;
 		if(front!=null) {
 			aux=front;
 			if(front.getNext()!=null) {
@@ -54,5 +61,4 @@ public class Queue <T> implements InterfaceQueue<T>{
 		}
 		return aux;
 	}
-
 }
