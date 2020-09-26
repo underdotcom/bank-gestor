@@ -1,6 +1,6 @@
 package model;
 
-public class Node <T> {
+public class QueueNode <T> {
 
 	private T data;
 	private Node<T> next;
