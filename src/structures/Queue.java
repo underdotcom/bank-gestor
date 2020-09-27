@@ -13,7 +13,10 @@ public class Queue <T> implements InterfaceQueue<T>{
 	}
 	
 	public QueueNode<T> front(){
-		return front;
+		if(!(front.equals(null)))
+			return front;
+		else
+			return null;
 	}
 	
 	@Override
