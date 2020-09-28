@@ -9,20 +9,26 @@ import structures.*;
 public class Bank {
 
 	private final int ARRAY_SIZE = 100;
-	
-	private RandomGenerator randomData;
 	private InterfaceHashTable<String, User> dataBase;
-	private ArrayList<User> presentUsersList;
 	private InterfaceHashTable<String, Desertor> deserters;
 	private InterfaceQueue<Turn> commonTurns;
+	
+	private RandomGenerator randomData;
+	private ArrayList<User> presentUsersList;
+	private ArrayList<User> commonUser;
+	private ArrayList<User> prioritaryUsers;
+	private int index;
 	//heap queue AllWithPriority>0
 	
 	public Bank() throws IOException {
 		dataBase = new HashTable<String, User>(ARRAY_SIZE);
 		deserters = new HashTable<String, Desertor>(ARRAY_SIZE/2);
+		presentUsersList= new ArrayList <User>();
+		commonUser= new ArrayList <User>();
+		prioritaryUsers=new ArrayList<User>();
 		commonTurns = new Queue<Turn>();
 		randomData= new RandomGenerator(100);
-
+		index=0;
 		initializeTestCases();
 	}
 	
@@ -37,14 +43,49 @@ public class Bank {
 		dataBase.add(user.getId(), user);
 	}
 
-	public void addNewTurn(Turn turn) {
+	public void addNewTurn() {
+		index++;
+		String id=""+randomData.getId(index);
+		User user= searchUser(id);
+		Turn turn = new Turn( user.getName(), user.getId(), user.getPriority());
+		
 		if(turn.getPriorityValue()>0) {
-			//addTurnPriority
+			prioritaryUsers.add(dataBase.getValue(turn.getId()));
 		}else {
+			commonUser.add(dataBase.getValue(turn.getId()));
 			commonTurns.enqueue(turn);
 		}
-		
 		presentUsersList.add(dataBase.getValue(turn.getId()));
+	}
+	
+	public ArrayList<User> commonList(){
+		return commonUser;
+	}
+	
+	public ArrayList<User> priorityList(){
+		return prioritaryUsers;
+	}
+	
+	public ArrayList<User> presentUserList(){
+		return presentUsersList;
+	}
+	
+	public String idClient() {
+		return commonTurns.front().getData().getId();
+	}
+	
+	public User searchUser(String key) {
+		return dataBase.getValue(key);
+	}
+	
+	public String attend(int queue) {
+		if(queue==1) {
+			String idDelete = commonTurns.dequeue().getData().getId();
+			return idDelete;
+		}else {
+			
+		}
+		return "";
 	}
 	
 	public void attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
@@ -57,11 +98,11 @@ public class Bank {
 		}else {
 			payCreditCard(id, cash);
 		}
-		
-		String idDelete = commonTurns.dequeue().getData().getId();
+
 		boolean delete = false;
+		commonUser.remove(0);
 		for (int i = 0; i < presentUsersList.size() && !delete; i++) {
-			if(presentUsersList.get(i).getId().equals(idDelete)) {
+			if(presentUsersList.get(i).getId().equals(id)) {
 				presentUsersList.remove(i);
 				delete = true;
 			}
