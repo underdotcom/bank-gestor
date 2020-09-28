@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import interfaces.*;
@@ -9,27 +10,33 @@ public class Bank {
 
 	private final int ARRAY_SIZE = 100;
 	
+	private RandomGenerator randomData;
 	private InterfaceHashTable<String, User> dataBase;
 	private ArrayList<User> presentUsersList;
 	private InterfaceHashTable<String, Desertor> deserters;
 	private InterfaceQueue<Turn> commonTurns;
-	//cola de prioridad AllWithPriority>0
+	//heap queue AllWithPriority>0
 	
-	public Bank() {
+	public Bank() throws IOException {
 		dataBase = new HashTable<String, User>(ARRAY_SIZE);
 		deserters = new HashTable<String, Desertor>(ARRAY_SIZE/2);
 		commonTurns = new Queue<Turn>();
+		randomData= new RandomGenerator(100);
+
 		initializeTestCases();
 	}
-
-	private void initializeTestCases() {
-		
+	
+	public void initializeTestCases() {
+		for (int i = 0; i <=99; i++) {
+			User user=randomData.generateUser(i);
+			dataBase.add(user.getId(),user);
+		}
 	}
 	
 	public void addNewUser(User user) {
 		dataBase.add(user.getId(), user);
 	}
-	
+
 	public void addNewTurn(Turn turn) {
 		if(turn.getPriorityValue()>0) {
 			//addTurnPriority
@@ -40,10 +47,16 @@ public class Bank {
 		presentUsersList.add(dataBase.getValue(turn.getId()));
 	}
 	
-	public void attendCommon(int option) {
-		
-		//Aqui van las opciones.
-		
+	public void attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
+		if(option==1) {
+			withdrawals(id, amount);
+		}else if(option==2) {
+			consign(id, amount);
+		}else if(option==3) {
+			cancelAccount(id, cancelationReason, cancelationDate);
+		}else {
+			payCreditCard(id, cash);
+		}
 		
 		String idDelete = commonTurns.dequeue().getData().getId();
 		boolean delete = false;
@@ -56,20 +69,18 @@ public class Bank {
 	}
 	
 	public void attendSpecial(int option) {
-		
-		
-		
-		//Elimina de la cola prioritaria
+		//Erase from the Heap	
 	}
 	
-	//Cualquier cliente
-	private void cancelAccount(User user, String cancelationReason, LocalDate cancelationDate) {
+	//////////////////////Any client//////////////////////////////////
+	
+	private void cancelAccount(String key, String cancelationReason, LocalDate cancelationDate) {
+		User user=dataBase.getValue(key);
 		deserters.add(user.getId(), new Desertor(user, cancelationReason, cancelationDate));
 		dataBase.remove(user.getId());
 	}
 	
-	//Cuenta de ahorro
-	//--
+	///////////////////////Just Current Account //////////////////////
 	private boolean withdrawals(String id, double ammount) {
 		User aux = dataBase.getValue(id);
 		double actualBalance = aux.getCurrentAccount().getBalanceAvailable();
@@ -85,12 +96,10 @@ public class Bank {
 		double actualBalance = aux.getCurrentAccount().getBalanceAvailable();
 		aux.getCurrentAccount().setBalanceAvailable(actualBalance + ammount);
 	}
-	//--
+	///////////////////////////////////////////////////////////////////////
 	
-	
-	//Credit
-	//--
-	private boolean pagarTarjeta(String id, boolean cash) {
+	////////////////////////Just CreditCad Method//////////////////////
+	private boolean payCreditCard(String id, boolean cash) {
 		User aux = dataBase.getValue(id);
 		LocalDate now = LocalDate.now();
 		if(((CreditCard)aux.getCreditCard()).getPayDate().equals(now) || 

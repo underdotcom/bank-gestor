@@ -9,7 +9,7 @@ public class CreditCard extends BankAccount{
 	private double balanceOwing;
 	private LocalDate payDate;
 	
-	public CreditCard(long balanceAvailable, String numberAccount, long balanceOwing, LocalDate payDate) {
+	public CreditCard(double balanceAvailable, String numberAccount, double balanceOwing, LocalDate payDate) {
 		super(balanceAvailable, numberAccount);
 		this.balanceOwing = balanceOwing;
 		this.payDate = payDate;
