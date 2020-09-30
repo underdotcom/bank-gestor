@@ -3,6 +3,7 @@ package ui;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -39,7 +41,8 @@ public class PrimaryPageGUI {
 	private Bank bank;
 	
 	private User currentUser;
-
+	
+    
 	////////// Containers
     @FXML
     private BorderPane borderPrimary;
@@ -48,11 +51,13 @@ public class PrimaryPageGUI {
     private BorderPane primaryBorder;
     
     @FXML
-    private BorderPane borderMain;
+    private AnchorPane anchorMain;
     
     @FXML
    	private TabPane tabPanePrimary;
     
+    @FXML
+    private AnchorPane borderCenter;
     ////////// Tap Pane
    
     @FXML
@@ -100,7 +105,14 @@ public class PrimaryPageGUI {
     @FXML
     private TableColumn<User, String>  creditColumn;
     
+    @FXML
+    private Tab cpTab;
     
+    @FXML
+    private Tab cTab;
+    
+    @FXML
+    private Tab wcTab;
     
     /////////// 	
     
@@ -145,15 +157,31 @@ public class PrimaryPageGUI {
 
     @FXML
     private RadioButton consignmentRadioButton;
-
+    
     @FXML
-    private DatePicker dateCancellation;
+    private Label dateCancelation;
 
     @FXML
     private ChoiceBox<String> criteriaChoiceBox;
 
     @FXML
     private ChoiceBox<String> sortChoiceBox;
+    
+    @FXML
+    private Button buttonStart;
+    
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button undoButton;
+
+    @FXML
+    void startButton(ActionEvent event) throws IOException {
+    	buttonStart.setVisible(false);
+    	anchorMain.setStyle("-fx-background-color: #ffffff");
+    	loadMenu();
+    }
 
     public PrimaryPageGUI() throws IOException{
     	bank= new Bank();
@@ -162,20 +190,14 @@ public class PrimaryPageGUI {
     
     @FXML
     void clickAttentCommon(ActionEvent event) throws IOException {
-    	currentUser();
-    	
-    	if(currentUser==null) {
-    		generateAlert("The queues are empty", AlertType.ERROR);    	
-    	}else {
-    		load("BankSecondPage.fxml");
-	        nameField.setText(""+currentUser.getName());
-	        idField.setText(""+currentUser.getId());
-	        balanceField.setText(""+currentUser.getCurrentAccount().getBalanceAvailable());
-	        balanceOwingCreditText.setText( String.valueOf((((CreditCard)currentUser.getCreditCard()).getBalanceOwing())));
-	        LocalDate date= ((CreditCard) currentUser.getCreditCard()).getPayDate();
-	        payDateText.setText(date.toString());     		
+    	try {
+    		currentUser();
+    		loadInformation();
+    	}catch(NullPointerException e) {
+    		generateAlert("Queue empty", AlertType.INFORMATION);
     	}
     }
+    
 
     @FXML
     void clickAttentPrioritary(ActionEvent event) throws IOException {
@@ -191,92 +213,130 @@ public class PrimaryPageGUI {
     void acceptClickWC(ActionEvent event) throws IOException {
     	try {
     		double amount= Double.parseDouble(amountCurrent.getText());
-    		if(withdrawRadioButton.isSelected()) {
+    		if(withdrawRadioButton.isSelected()==false && consignmentRadioButton.isSelected()==false ) {
+    			generateAlert("Please, choose an option", AlertType.ERROR);
+    		}else if(withdrawRadioButton.isSelected()) {
         		bank.attendCommon(1, currentUser.getId(), amount, null, null, false);
+        		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}else if(consignmentRadioButton.isSelected()) {
         		bank.attendCommon(2, currentUser.getId(), amount, null, null, false);
+        		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}
-    		generateAlert("Amount Modificated Succesfully. /n Actual Amount: "+currentUser.getCurrentAccount().getBalanceAvailable(), AlertType.INFORMATION);
-    		loadMenu();
+    		updateInformation();
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please", AlertType.ERROR);
     	}
-
     }
     
     @FXML
-    void acceptClickCancel(ActionEvent event) {
+    void acceptClickCancel(ActionEvent event) throws IOException {
     	if(cancelReasonText.getText().equals("")) {
     		generateAlert("Please, write the reason of your goodybye", AlertType.ERROR);	
     	}else {
-    		bank.attendCommon(2, currentUser.getId(), 0, cancelReasonText.getText(), dateCancellation.getValue(), false);
-    		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye",AlertType.INFORMATION);
+    		updateInformation();
+    		bank.attendCommon(2, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
+    		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
     	}
     }
 
     @FXML
-    void acceptClickPay(ActionEvent event) {
+    void acceptClickPay(ActionEvent event) throws IOException {
     	try {
-    		if(cashRadioButton.isSelected()) {
-    			bank.attendCommon(2, currentUser.getId(), 0, cancelReasonText.getText(), dateCancellation.getValue(), true);
-    		}else {
-    			bank.attendCommon(3, currentUser.getId(), 0, null, null, false);
-    		}	
+    		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
+    			generateAlert("Please, choose an option", AlertType.ERROR);
+    		}else if(cashRadioButton.isSelected()) {
+    			bank.attendCommon(2, currentUser.getId(), 0.0, null, null, true);
+    			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
+    		}else if (savingButton.isSelected()){
+    			bank.attendCommon(3, currentUser.getId(), 0.0, null, null, false);
+    			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
+    		}
+    		updateInformation();
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please",AlertType.ERROR);
     	}
-    }
-
-    @FXML
-    void backClick(MouseEvent event) throws IOException {
-    	loadMenu();
-    	generateUser();
     }
     
     @FXML
     void generateUserClick(ActionEvent event) {
     	bank.addNewTurn();
-    	generateUser();
+    	initialiceTableViews();
+    }
+    
+    @FXML
+    void backClick(ActionEvent event) throws IOException {
+    	loadMenu();
     }
 
     @FXML
-    void undoClick(MouseEvent event) {
+    void undoClick(ActionEvent event) {
 
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
-   
+    
+    void loadInformation() throws IOException {
+    	if(currentUser==null) {
+    		generateAlert("The queues are empty", AlertType.ERROR);    	
+    	}else {
+    		load("BankSecondPage.fxml");
+    		updateInformation();
+    	}
+    }
+    
+    void updateInformation() {
+    	backButton.setVisible(true);
+		undoButton.setVisible(true);
+		nameField.setText(""+currentUser.getName());
+        idField.setText(""+currentUser.getId());
+        dateCancelation.setText(LocalDate.now().toString());
+        balanceField.setText("$ "+currentUser.getCurrentAccount().getBalanceAvailable());
+        balanceOwingCreditText.setText( String.valueOf((((CreditCard)currentUser.getCreditCard()).getBalanceOwing())));
+        payDateText.setText(((CreditCard) currentUser.getCreditCard()).getPayDate().toString());   
+    }
+    
     void currentUser() {
-    	String id=bank.attend(1);
+    	String id=bank.idClient();
     	currentUser=bank.searchUser(id);
     }
     
-    @FXML
-    void startButton(MouseEvent event) throws IOException {
-    	loadMenu();
-    }
-
     void loadMenu() throws IOException {
+    	backButton.setVisible(false);
+		undoButton.setVisible(false);
     	FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("BankPrincipalPage.fxml"));
     	fxmlLoader.setController(this);
     	Parent parent = fxmlLoader.load();
-    	borderMain.setCenter(parent); 
+    	anchorMain.getChildren().clear();
+    	anchorMain.getChildren().addAll(parent);
+    	initialiceTableViews();
     }
     
     void load(String route) throws IOException {
     	FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource(route));
     	fxmlLoader.setController(this);
     	Parent parent = fxmlLoader.load();
-    	borderMain.setCenter(parent); 
+    	anchorMain.getChildren().clear();
+    	anchorMain.getChildren().addAll(parent); 
     }
     
-    void generateAlert(String msg, AlertType type) {
+    void generateAlert(String msg, AlertType type) throws IOException {
     	Alert alert = new Alert(type);
     	alert.setContentText(msg);
+    	if(type.equals(AlertType.CONFIRMATION)){
+			ButtonType buttonTypeOne = new ButtonType("Yes");
+			ButtonType buttonTypeTwo = new ButtonType("No");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if (result.get()== buttonTypeOne){
+    		   bank.deleteUser(currentUser.getId());
+    		   loadMenu();
+    		   currentUser=null;
+    		}
+    	}
     	alert.show();
     }
     
-    void generateUser() {
+    void initialiceTableViews() {
     	ArrayList<User> commonUser= bank.commonList();
     	ArrayList<User> priorityUser= bank.priorityList();
   

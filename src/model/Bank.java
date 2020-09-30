@@ -78,15 +78,18 @@ public class Bank {
 		return dataBase.getValue(key);
 	}
 	
-	public String attend(int queue) {
-		if(queue==1) {
-			String idDelete = commonTurns.dequeue().getData().getId();
-			return idDelete;
-		}else {
-			
+	public void deleteUser(String id) {
+		boolean delete = false;
+		commonTurns.dequeue();
+		commonUser.remove(0);
+		for (int i = 0; i < presentUsersList.size() && !delete; i++) {
+			if(presentUsersList.get(i).getId().equals(id)) {
+				presentUsersList.remove(i);
+				delete = true;
+			}
 		}
-		return "";
 	}
+
 	
 	public void attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
 		if(option==1) {
@@ -97,15 +100,6 @@ public class Bank {
 			cancelAccount(id, cancelationReason, cancelationDate);
 		}else {
 			payCreditCard(id, cash);
-		}
-
-		boolean delete = false;
-		commonUser.remove(0);
-		for (int i = 0; i < presentUsersList.size() && !delete; i++) {
-			if(presentUsersList.get(i).getId().equals(id)) {
-				presentUsersList.remove(i);
-				delete = true;
-			}
 		}
 	}
 	
@@ -123,20 +117,19 @@ public class Bank {
 	
 	///////////////////////Just Current Account //////////////////////
 	private boolean withdrawals(String id, double ammount) {
-		User aux = dataBase.getValue(id);
-		double actualBalance = aux.getCurrentAccount().getBalanceAvailable();
+		double actualBalance = dataBase.getValue(id).getCurrentAccount().getBalanceAvailable();
 		if(actualBalance >= ammount) {
-			aux.getCurrentAccount().setBalanceAvailable(actualBalance - ammount);
+			dataBase.getValue(id).getCurrentAccount().setBalanceAvailable(actualBalance - ammount);
 			return true;
 		}
 		return false;
 	}
 	
 	private void consign(String id, double ammount) {
-		User aux = dataBase.getValue(id);
-		double actualBalance = aux.getCurrentAccount().getBalanceAvailable();
-		aux.getCurrentAccount().setBalanceAvailable(actualBalance + ammount);
+		double actualBalance = dataBase.getValue(id).getCurrentAccount().getBalanceAvailable();
+		dataBase.getValue(id).getCurrentAccount().setBalanceAvailable(actualBalance + ammount);
 	}
+	
 	///////////////////////////////////////////////////////////////////////
 	
 	////////////////////////Just CreditCad Method//////////////////////

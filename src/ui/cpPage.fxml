@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="343.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane layoutY="25.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <RadioButton fx:id="cashRadioButton1" layoutX="67.0" layoutY="196.0" mnemonicParsing="false" text="Cash">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="creditAction1" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="savingButton1" layoutX="67.0" layoutY="242.0" mnemonicParsing="false" text="Saving Account" toggleGroup="$creditAction1" />
+                  <Label layoutX="320.0" layoutY="173.0" text="Balance Available:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="320.0" layoutY="196.0" text="Balance Owing:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="34.0" layoutY="293.0" mnemonicParsing="false" onAction="#acceptClickPay" prefHeight="25.0" prefWidth="540.0" text="Pay" />
+                  <Label layoutX="67.0" layoutY="161.0" text="Select the payment method:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="320.0" layoutY="219.0" text="Payment Day:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Text fx:id="balanceOwingCreditText" layoutX="423.0" layoutY="209.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="137.0" />
+                  <Text fx:id="payDateText" layoutX="422.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="139.0" />
+                  <ImageView fitHeight="117.0" fitWidth="542.0" layoutX="34.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../data/PC.PNG" />
+                     </image>
+                  </ImageView>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="126.0" layoutX="310.0" layoutY="151.0" stroke="BLACK" strokeType="INSIDE" width="267.0" />
+                  <Label layoutX="320.0" layoutY="242.0" text="Credit Card Number:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="balanceAvailableCDLabel" layoutX="430.0" layoutY="173.0" prefHeight="17.0" prefWidth="125.0" />
+                  <Label fx:id="creditCardNumberLabel" layoutX="444.0" layoutY="242.0" prefHeight="17.0" prefWidth="119.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
