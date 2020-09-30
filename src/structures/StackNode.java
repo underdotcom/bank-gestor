@@ -3,24 +3,24 @@ package structures;
 public class StackNode <V>{
 	
 	private V value;
+
+	private StackNode <V> prev;
 	
-	private StackNode <V> next;
-	
-	public StackNode(V value, StackNode <V> next) {
+	public StackNode(V value) {
 		this.value = value;
-		this.next = next;
+		prev=null;
 	}
 	
 	public V getV() {
 		return value;
 	}
 	
-	public StackNode <V> getNext(){
-		return next;
+	public StackNode <V> getPrev(){
+		return prev;
 	}
 	
-	public void setNext(StackNode <V> next) {
-		this.next = next;
+	public void setPrev(StackNode <V> prev) {
+		this.prev = prev;
 	}
 
 }

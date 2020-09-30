@@ -191,7 +191,7 @@ public class PrimaryPageGUI {
     @FXML
     void clickAttentCommon(ActionEvent event) throws IOException {
     	try {
-    		currentUser();
+    		currentUser(0);
     		loadInformation();
     	}catch(NullPointerException e) {
     		generateAlert("Queue empty", AlertType.INFORMATION);
@@ -295,9 +295,14 @@ public class PrimaryPageGUI {
         payDateText.setText(((CreditCard) currentUser.getCreditCard()).getPayDate().toString());   
     }
     
-    void currentUser() {
-    	String id=bank.idClient();
-    	currentUser=bank.searchUser(id);
+    void currentUser(int type) {
+    	if(type==0) {
+    		String id=bank.getIdCommonClient();
+        	currentUser=bank.searchUser(id);
+    	}else {
+    		String id=bank.getIdPrioritaryClient();
+        	currentUser=bank.searchUser(id);
+    	}
     }
     
     void loadMenu() throws IOException {
@@ -337,8 +342,8 @@ public class PrimaryPageGUI {
     }
     
     void initialiceTableViews() {
-    	ArrayList<User> commonUser= bank.commonList();
-    	ArrayList<User> priorityUser= bank.priorityList();
+    	ArrayList<User> commonUser= bank.getCommonList();
+    	ArrayList<User> priorityUser= bank.getPrioritayList();
   
     	ObservableList<User> itemsC=FXCollections.observableArrayList(commonUser);
     	ObservableList<User> itemsP=FXCollections.observableArrayList(priorityUser);
