@@ -36,9 +36,10 @@ public class RandomGenerator {
 	public User generateUser(int index) {
 			int priority=generatePriority();
 			int moneyValue=(int)(Math.random()*100);
+			int randomName=(int)(Math.random()*names.length);
 			CurrentAccount cAccount=new CurrentAccount(VALUES[moneyValue], String.valueOf(ACCOUNTS[index]));
 			CreditCard creditAccount=new CreditCard(VALUES[index],  String.valueOf(ACCOUNTS[index]), (VALUES[index]-(int)(Math.random()*300000)), LocalDate.now());
-		return new User((names[index]), String.valueOf(ID[index]), creditAccount, cAccount, priority); 
+		return new User((names[randomName]), String.valueOf(ID[index]), creditAccount, cAccount, priority); 
 		
 	}
 	

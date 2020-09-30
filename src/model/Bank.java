@@ -17,6 +17,7 @@ public class Bank {
 	private ArrayList<User> presentUsersList;
 	private ArrayList<User> commonUser;
 	private ArrayList<User> prioritaryUsers;
+	private ArrayList<Desertor> desertorsList;
 	private int index;
 	//heap queue AllWithPriority>0
 	
@@ -26,6 +27,7 @@ public class Bank {
 		presentUsersList= new ArrayList <User>();
 		commonUser= new ArrayList <User>();
 		prioritaryUsers=new ArrayList<User>();
+		desertorsList=new ArrayList<Desertor>();
 		commonTurns = new Queue<Turn>();
 		randomData= new RandomGenerator(100);
 		index=0;
@@ -40,6 +42,7 @@ public class Bank {
 		User user=dataBase.getValue(key);
 		deserters.add(user.getId(), new Desertor(user, cancelationReason, cancelationDate));
 		dataBase.remove(user.getId());
+		desertorsList.add(new Desertor(user, cancelationReason, cancelationDate));
 	}
 	
 	///////////////////////Just Current Account //////////////////////
@@ -55,6 +58,7 @@ public class Bank {
 	private void consign(String id, double ammount) {
 		double actualBalance = dataBase.getValue(id).getCurrentAccount().getBalanceAvailable();
 		dataBase.getValue(id).getCurrentAccount().setBalanceAvailable(actualBalance + ammount);
+		
 	}
 	
 	////////////////////////Just CreditCad Method//////////////////////
@@ -72,7 +76,7 @@ public class Bank {
 				}else
 					return false;
 			}
-				
+			
 			((CreditCard)aux.getCreditCard()).pay();
 			return true;
 		}
@@ -107,15 +111,17 @@ public class Bank {
 		presentUsersList.add(dataBase.getValue(turn.getId()));
 	}
 	
-	public void attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
+	public boolean attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
 		if(option==1) {
-			withdrawals(id, amount);
+			return withdrawals(id, amount);
 		}else if(option==2) {
 			consign(id, amount);
+			return true;
 		}else if(option==3) {
 			cancelAccount(id, cancelationReason, cancelationDate);
+			return true;
 		}else {
-			payCreditCard(id, cash);
+			return payCreditCard(id, cash);
 		}
 	}
 	
@@ -161,7 +167,19 @@ public class Bank {
 		return ""	;
 	}
 	
+	public ArrayList<Desertor> getDesertors(){
+		return desertorsList;
+	}
+	
+	public long getSizeDataBase() {
+		return dataBase.getSize();
+	}
+	
 	public User searchUser(String key) {
 		return dataBase.getValue(key);
+	}
+	
+	public User searchDesertor(String key) {
+		return deserters.getValue(key);
 	}
 }
