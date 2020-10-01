@@ -112,6 +112,11 @@ public class PrimaryPageGUI {
     private Tab wcTab;
     
     /////////// 	
+    @FXML
+    private Label creditCardNumberLabel;
+    
+    @FXML
+    private Label balanceAvailableCDLabel;
     
     @FXML
     private Label nameField;
@@ -209,8 +214,8 @@ public class PrimaryPageGUI {
 	@FXML
     void clickSort(ActionEvent event) {
     	initialiceTableViews();
-    	
     	ArrayList<User> dataBaseUsers= bank.getPresentUserList();
+    	
     	if(sortChoiceBox.getValue().equals("Bubble sort")) {
     		bank.bubbleSort(dataBaseUsers);
     	}else if(sortChoiceBox.getValue().equals("Collections sort")) {
@@ -218,6 +223,7 @@ public class PrimaryPageGUI {
     	}else if(sortChoiceBox.getValue().equals("Merge sort"))  {
     		bank.mergeSort(dataBaseUsers);
     	}
+    	
     	showInformationTable();
     }
 
@@ -248,7 +254,7 @@ public class PrimaryPageGUI {
     	}else {
     		
     		updateInformation();
-    		bank.attend(2, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
+    		bank.attend(3, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
     		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
     	}
     }
@@ -259,10 +265,10 @@ public class PrimaryPageGUI {
     		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
     			generateAlert("Please, choose an option.", AlertType.ERROR);
     		}else if(cashRadioButton.isSelected()) {
-    			bank.attend(2, currentUser.getId(), 0.0, null, null, true);
+    			bank.attend(4, currentUser.getId(), 0.0, null, null, true);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}else if (savingButton.isSelected()){
-    			bank.attend(3, currentUser.getId(), 0.0, null, null, false);
+    			bank.attend(4, currentUser.getId(), 0.0, null, null, false);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}
     	
@@ -311,6 +317,8 @@ public class PrimaryPageGUI {
 		nameField.setText(""+currentUser.getName());
         idField.setText(""+currentUser.getId());
         dateCancelation.setText(LocalDate.now().toString());
+        balanceAvailableCDLabel.setText(""+currentUser.getCreditCard().getBalanceAvailable());
+        creditCardNumberLabel.setText(""+currentUser.getCreditCard().getNumberAccount());
         balanceField.setText("$ "+currentUser.getCurrentAccount().getBalanceAvailable());
         balanceOwingCreditText.setText( String.valueOf((((CreditCard)currentUser.getCreditCard()).getBalanceOwing())));
         payDateText.setText(((CreditCard) currentUser.getCreditCard()).getPayDate().toString());   
