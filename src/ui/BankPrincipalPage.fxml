@@ -48,9 +48,9 @@
                                  <columns>
                                     <TableColumn fx:id="ccColumn" prefWidth="89.0" text="C.C." />
                                     <TableColumn fx:id="nameColumn" prefWidth="104.0" text="Name" />
-                                    <TableColumn fx:id="accountNumberColumn" prefWidth="92.0" text="Account #" />
-                                    <TableColumn fx:id="connectionDateColumn" prefWidth="114.0" text="Connection Date" />
-                                    <TableColumn fx:id="balanceColumn" prefWidth="113.0" text="Balance" />
+                                    <TableColumn fx:id="accountNumberColumn" prefWidth="121.0" text="Account #" />
+                                    <TableColumn fx:id="connectionDateColumn" prefWidth="104.0" text="Connection Date" />
+                                    <TableColumn fx:id="balanceColumn" prefWidth="94.0" text="Balance" />
                                     <TableColumn fx:id="payDateColumn" minWidth="0.0" prefWidth="57.0" text="Pay Date" />
                                  </columns>
                               </TableView>
