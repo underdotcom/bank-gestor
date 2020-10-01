@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="anchorMain" prefHeight="341.0" prefWidth="600.0">
+      <AnchorPane fx:id="anchorMain" layoutX="-14.0" prefHeight="341.0" prefWidth="600.0">
          <children>
             <Button fx:id="buttonStart" layoutX="173.0" layoutY="316.0" mnemonicParsing="false" onAction="#startButton" prefHeight="38.0" prefWidth="270.0" text="Start" />
+            <ImageView fitHeight="303.0" fitWidth="617.0" layoutX="47.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../data/welcome.jpg" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <Button fx:id="backButton" layoutX="27.0" layoutY="364.0" mnemonicParsing="false" onAction="#backClick" prefHeight="25.0" prefWidth="104.0" text="Back" visible="false" />
