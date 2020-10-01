@@ -3,7 +3,10 @@ package model;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import interfaces.*;
+import sort_algorithms.*;
 import structures.*;
 
 public class Bank {
@@ -13,6 +16,7 @@ public class Bank {
 	private InterfaceHashTable<String, Desertor> deserters;
 	private InterfaceQueue<Turn> commonTurns;
 	
+	private Sort<String> sort;
 	private RandomGenerator randomData;
 	private ArrayList<User> presentUsersList;
 	private ArrayList<User> commonUser;
@@ -141,9 +145,21 @@ public class Bank {
 		}
 	}
 	
-	//sort merge
+	public void mergeSort(ArrayList<String> list) {
+		sort = new MergeSort<String>();
+		sort.sortAscending(list);
+	}
+	
+	public void bubbleSort(ArrayList<String> list) {
+		sort = new BubbleSort<String>();
+		sort.sortAscending(list);
+	}
+	
+	public void collectionsSort(ArrayList<String> list) {
+		Collections.sort(list);
+	}
+	
 	//heapSort
-	//Collections
 	
 	/////////////////////////////////////////Getters Methods////////////////////////////////////////////////////////
 	
