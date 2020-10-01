@@ -67,14 +67,13 @@ public class User implements Comparable <User>{
 	@Override
 	public int compareTo(User u) {
 		
-		if((name.compareTo(u.name))>0) {
+		if((name.compareTo(u.name))<0) {
 			return -1;
-		}else if ((name.compareTo(u.name))<0) {
+		}else if ((name.compareTo(u.name))>0) {
 			return 1;
 		}else {
 			return 0;
 		}
-		
 	}
 	
 	

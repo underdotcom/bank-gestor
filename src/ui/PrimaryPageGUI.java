@@ -33,6 +33,7 @@ import javafx.scene.text.Text;
 import model.Bank;
 import model.CreditCard;
 import model.User;
+import structures.Stack;
 
 public class PrimaryPageGUI {
 	
@@ -40,6 +41,7 @@ public class PrimaryPageGUI {
 	
 	private User currentUser;
 	
+	private Stack<Bank> undo;
     
 	////////// Containers
     @FXML
@@ -90,9 +92,6 @@ public class PrimaryPageGUI {
 
     @FXML
     private TableColumn<User, String> balanceColumn;
-
-    @FXML
-    private TableColumn<User, String>  payDateColumn;
 
     @FXML
     private TableColumn<User, String>  cardColumn;
@@ -200,9 +199,14 @@ public class PrimaryPageGUI {
     @FXML
     void clickAttentPrioritary(ActionEvent event) throws IOException {
     	load("BankSecondPage.fxml");
+    	initializeUndo();
     }
 
-    @FXML
+    private void initializeUndo() {
+		undo = new Stack<Bank>();
+	}
+
+	@FXML
     void clickSort(ActionEvent event) {
     	initialiceTableViews();
     	
@@ -230,6 +234,7 @@ public class PrimaryPageGUI {
         		bank.attend(2, currentUser.getId(), amount, null, null, false);
         		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}
+    		
     		updateInformation();
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please", AlertType.ERROR);
@@ -241,6 +246,7 @@ public class PrimaryPageGUI {
     	if(cancelReasonText.getText().equals("")) {
     		generateAlert("Please, write the reason of your goodybye", AlertType.ERROR);	
     	}else {
+    		
     		updateInformation();
     		bank.attend(2, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
     		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
@@ -251,7 +257,7 @@ public class PrimaryPageGUI {
     void acceptClickPay(ActionEvent event) throws IOException {
     	try {
     		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
-    			generateAlert("Please, choose an option", AlertType.ERROR);
+    			generateAlert("Please, choose an option.", AlertType.ERROR);
     		}else if(cashRadioButton.isSelected()) {
     			bank.attend(2, currentUser.getId(), 0.0, null, null, true);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
@@ -259,6 +265,7 @@ public class PrimaryPageGUI {
     			bank.attend(3, currentUser.getId(), 0.0, null, null, false);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}
+    	
     		updateInformation();
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please",AlertType.ERROR);
@@ -269,16 +276,21 @@ public class PrimaryPageGUI {
     void generateUserClick(ActionEvent event) {
     	bank.addNewTurn();
     	initialiceTableViews();
+    	showInformationTable();
     }
     
     @FXML
     void backClick(ActionEvent event) throws IOException {
+    	deleteUser();
     	loadMenu();
     }
 
     @FXML
-    void undoClick(ActionEvent event) {
-
+    void undoClick(ActionEvent event) throws IOException {
+    	if(undo.top()!=null)
+    		bank=undo.pop().getV();
+    	else
+    		generateAlert("Undo is empty", AlertType.ERROR);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,6 +338,7 @@ public class PrimaryPageGUI {
     	anchorMain.getChildren().clear();
     	anchorMain.getChildren().addAll(parent);
     	initialiceTableViews();
+    	showInformationTable();
     }
     
     void load(String route) throws IOException {
@@ -345,12 +358,17 @@ public class PrimaryPageGUI {
 			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
     		Optional<ButtonType> result = alert.showAndWait();
     		if (result.get()== buttonTypeOne){
-    		   bank.deleteUser(currentUser.getId());
-    		   loadMenu();
-    		   currentUser=null;
+    		   deleteUser();
     		}
+    	}else {
+    		alert.show();
     	}
-    	alert.show();
+    }
+    
+    void deleteUser() throws IOException {
+    	 bank.deleteUser(currentUser.getId());
+		   loadMenu();
+		   currentUser=null;
     }
     
     void initialiceTableViews() {
@@ -369,12 +387,13 @@ public class PrimaryPageGUI {
  
     }
     
-    void InitialiceChoiceBox() {
+    private void initialiceChoiceBox() {
     	sortChoiceBox.setItems(FXCollections.observableArrayList("Bubble sort", "Collections sort", "Merge sort"));
+    	sortChoiceBox.setValue("Bubble sort");
     }
     
     void showInformationTable() {
-    	sortChoiceBox.setItems(FXCollections.observableArrayList("Bubble sort", "Collections sort", "Merge sort"));
+    	initialiceChoiceBox();
     	ArrayList<User> dataBaseUsers= bank.getPresentUserList();
     	ObservableList<User> itemsC=FXCollections.observableArrayList(dataBaseUsers);
     	dataBase.setItems(itemsC);
@@ -383,7 +402,5 @@ public class PrimaryPageGUI {
     	accountNumberColumn.setCellValueFactory(new PropertyValueFactory<User, String>("NumberCount"));
     	connectionDateColumn.setCellValueFactory(new PropertyValueFactory<User, String>("conection"));
     	balanceColumn.setCellValueFactory(new PropertyValueFactory<User, String>("AccountB"));
-    	payDateColumn.setCellValueFactory(new PropertyValueFactory<User, String>("getPayDate"));
-    	
     }
 }

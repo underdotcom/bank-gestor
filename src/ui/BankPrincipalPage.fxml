@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -11,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="borderPrimary" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPrimary" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -46,12 +49,11 @@
                            <content>
                               <TableView fx:id="dataBase" prefHeight="283.0" prefWidth="582.0">
                                  <columns>
-                                    <TableColumn fx:id="ccColumn" prefWidth="89.0" text="C.C." />
-                                    <TableColumn fx:id="nameColumn" prefWidth="104.0" text="Name" />
-                                    <TableColumn fx:id="accountNumberColumn" prefWidth="121.0" text="Account #" />
-                                    <TableColumn fx:id="connectionDateColumn" prefWidth="104.0" text="Connection Date" />
-                                    <TableColumn fx:id="balanceColumn" prefWidth="94.0" text="Balance" />
-                                    <TableColumn fx:id="payDateColumn" minWidth="0.0" prefWidth="57.0" text="Pay Date" />
+                                    <TableColumn fx:id="ccColumn" prefWidth="107.0" text="C.C." />
+                                    <TableColumn fx:id="nameColumn" prefWidth="98.0" text="Name" />
+                                    <TableColumn fx:id="accountNumberColumn" prefWidth="134.0" text="Account #" />
+                                    <TableColumn fx:id="connectionDateColumn" prefWidth="116.0" text="Connection Date" />
+                                    <TableColumn fx:id="balanceColumn" prefWidth="126.0" text="Balance" />
                                  </columns>
                               </TableView>
                            </content>
