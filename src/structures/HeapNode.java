@@ -1,6 +1,6 @@
 package structures;
 
-public class HeapNode <T,V> implements Comparable <T> {
+public class HeapNode<T ,V> {
 
 	public T key;
 	public V value;
@@ -25,12 +25,4 @@ public class HeapNode <T,V> implements Comparable <T> {
 	public void setValue(V value) {
 		this.value = value;
 	}
-
-	@Override
-	public int compareTo(T arg0) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-
 }
