@@ -2,7 +2,7 @@ package structures;
 
 import interfaces.InterfaceHeap;
 
-public class Heap <K extends Comparable<K>, V> implements InterfaceHeap {
+public class Heap <K extends Comparable<K>, V> implements InterfaceHeap <K,V>{
 	
 	private HeapNode< K,V>[] array;
 	private int heapSize;
@@ -56,24 +56,20 @@ public class Heap <K extends Comparable<K>, V> implements InterfaceHeap {
 			if(l!=-1 ) {
 				System.out.println(array[largest].getKey());
 				if( l<= heapSize && array[l].getKey().compareTo(array[index].getKey())>0){
-					System.out.println(array[l].getKey()+" L win against to "+ array[index].getKey());
 					largest=l;	
-					System.out.println(index + "es  "+ l);
 				}
 			}
 			if(r!=-1) {
-				System.out.println(array[largest].getKey() + "largest vs r" + array[r].getKey());
+				
 				if( r<=heapSize && array[r].getKey().compareTo(array[largest].getKey())>0) {
-					System.out.println(array[r].getKey()+" win against "+ array[index].getKey());
+				
 					largest=r;
 				}
 			}
-			System.out.println(largest+" comparacion final " + index);
+
 			if(largest>index ||	 largest<index) {
 				HeapNode<K,V> aux=array[largest];
-				System.out.println("largest pasa a ser "+largest+ "index"+index);
 				array[largest]=array[index];
-				System.out.println("index para a ser "+aux.getValue() );
 				array[index]=aux;
 			}else {
 				return array;
@@ -89,6 +85,7 @@ public class Heap <K extends Comparable<K>, V> implements InterfaceHeap {
 		for (int i = div; i>0; i--) {
 			array=heapify(i);
 		}
+
 		return array;
 	}
 	
@@ -97,13 +94,44 @@ public class Heap <K extends Comparable<K>, V> implements InterfaceHeap {
 		return array_size;
 	}
 
-	public boolean addHeapNode(K key, V value) {
+	public boolean addHeapNode(K key, V value, int priority) {
 		if(available<array_size) {
-			array[available]=new HeapNode<K,V>(key, value);
+			array[available]=new HeapNode<K,V>(key, value, priority);
 			available++;
 			return true;
 		}else {
 			return false;
 		}
 	}	
+	////Insert a new Element
+	public boolean insert(HeapNode<K,V> C) {
+		
+		heapSize= heapSize+1;
+		int index=heapSize;
+		
+		while(index>1 && array[father(index)].getKey().compareTo(C.getKey())>0) {
+			HeapNode<K,V> aux=array[index];
+			array[index]=array[father(index)];
+			array[father(index)]=aux;
+			index=father(index);
+		}
+		
+		array[index]=C;
+		return false;
+	}
+	
+	///// Extract the max object
+	public HeapNode<K,V> extracMax() {
+		HeapNode<K,V> max=null;
+		if(array_size<0) {
+			return null;
+		}else {
+			max=array[1];
+			array[1]=array[heapSize];
+			heapSize= heapSize-1;
+			heapify(1);
+		}
+		return max;
+	}
+	
 }

@@ -52,9 +52,8 @@ public class BankTest {
 
 		if(bank.getCommonList().size()>0) { /////test to common 
 			assertEquals(String.valueOf(RandomGenerator.ID[4]), bank.searchUser(String.valueOf(RandomGenerator.ID[4])).getId());
-		}else { ////test to prioritary
-			
 		}
+		
 	}
 
 	@Test
@@ -65,13 +64,11 @@ public class BankTest {
 		bank.addNewTurn();
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
-			bank.attendCommon(3, userId, 0.0, "Too much expensive for me", LocalDate.now(), false);
+			bank.attend(3, userId, 0.0, "Too much expensive for me", LocalDate.now(), false);
 			assertNull(bank.searchUser(userId));
 			assertEquals(bank.getDesertors().get(0).getId(), userId);
 			assertEquals(bank.searchDesertor(userId).getId(),userId);
 			bank.deleteUser(userId);
-		}else { ////// test for prioritary
-				
 		}
 		
 		//// Second case. The bank have more clients in a queue and all of them cancel their accounts.
@@ -83,12 +80,10 @@ public class BankTest {
 		try {
 			if(bank.getCommonList().size()>i) { ///test for commons
 				String userId=bank.getCommonList().get(i).getId();
-				bank.attendCommon(3, userId, 0.0, "Too much expensive for me", LocalDate.now(), false);
+				bank.attend(3, userId, 0.0, "Too much expensive for me", LocalDate.now(), false);
 				assertNull(bank.searchUser(userId));
 				assertEquals(bank.getDesertors().get(i+1).getId(), userId);
 				assertEquals(bank.searchDesertor(userId).getId(),userId);
-			}else { ////// test for prioritary
-					
 			}
 		}catch(IndexOutOfBoundsException e) {
 			assertTrue(false, "This Test Case is volatile because the random system can create a 2 common users or 1 User or even nothing. Instead, this created an another type of User");
@@ -107,12 +102,10 @@ public class BankTest {
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
 			int finalAmount= (int)(bank.searchUser(userId).getCurrentAccount().getBalanceAvailable() - amountTowithdraw);
-			bank.attendCommon(1, userId, amountTowithdraw , null, LocalDate.now(), false);
+			bank.attend(1, userId, amountTowithdraw , null, LocalDate.now(), false);
 			assertEquals(finalAmount, (int)bank.searchUser(userId).getCurrentAccount().getBalanceAvailable());
 			bank.deleteUser(userId);
-		}else { ////// test for prioritary
-				
-		}
+		}else 
 		
 		//// Second case. The amount is same than the available
 		bank.addNewTurn();
@@ -120,19 +113,16 @@ public class BankTest {
 			String userId=bank.getCommonList().get(0).getId();
 			amountTowithdraw=bank.searchUser(userId).getCurrentAccount().getBalanceAvailable();
 			int finalAmount= (int)(bank.searchUser(userId).getCurrentAccount().getBalanceAvailable() - amountTowithdraw);
-			bank.attendCommon(1, userId, amountTowithdraw , null, LocalDate.now(), false);
+			bank.attend(1, userId, amountTowithdraw , null, LocalDate.now(), false);
 			assertEquals(finalAmount, (int)bank.searchUser(userId).getCurrentAccount().getBalanceAvailable());
 			bank.deleteUser(userId);
-		}else { ////// test for prioritary
-				
 		}
-		
 		bank.addNewTurn();
 		//// Third case. The amount is superior than the available
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
 			amountTowithdraw=bank.searchUser(userId).getCurrentAccount().getBalanceAvailable()+100;
-			assertFalse("It is accepting wrong values", bank.attendCommon(1, userId, amountTowithdraw , null, LocalDate.now(), false));
+			assertFalse("It is accepting wrong values", bank.attend(1, userId, amountTowithdraw , null, LocalDate.now(), false));
 		}else { ////// test for prioritary
 				
 		}
@@ -145,11 +135,9 @@ public class BankTest {
 		bank.addNewTurn();
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
-			bank.attendCommon(4, userId, 0.0 ,null , LocalDate.now(), true);
+			bank.attend(4, userId, 0.0 ,null , LocalDate.now(), true);
 			assertEquals((int)bank.searchUser(userId).getCreditCard().getBalanceAvailable(),(int)CreditCard.quota);
 			bank.deleteUser(userId);
-		}else { ////// test for prioritary
-				
 		}
 		
 		///// Second case. The user pay on the dat but use it money of currentCount
@@ -157,12 +145,9 @@ public class BankTest {
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
 			bank.searchUser(userId).getCurrentAccount().setBalanceAvailable(5000000);
-			assertTrue(bank.attendCommon(4, userId, 0.0 ,null , LocalDate.now(), false));
+			assertTrue(bank.attend(4, userId, 0.0 ,null , LocalDate.now(), false));
 			assertEquals((int)bank.searchUser(userId).getCreditCard().getBalanceAvailable(),(int)CreditCard.quota);
 			bank.deleteUser(userId);
-		}else { ////// test for prioritary
-				
-			
 		}
 		
 		//// Third case. The user pay on the day, use money from it currentAccount but in this time, it isn't enought
@@ -170,10 +155,7 @@ public class BankTest {
 		if(bank.getCommonList().size()>0) { ///test for commons
 			String userId=bank.getCommonList().get(0).getId();
 			bank.searchUser(userId).getCurrentAccount().setBalanceAvailable(0);
-			bank.attendCommon(4, userId, 0.0 ,null , LocalDate.now(), false);
-		}else { ////// test for prioritary
-				
-			
+			bank.attend(4, userId, 0.0 ,null , LocalDate.now(), false);
 		}
 		
 	}
@@ -187,12 +169,9 @@ public class BankTest {
 			String userId=bank.getCommonList().get(0).getId();
 			int total= (int)(bank.searchUser(userId).getCurrentAccount().getBalanceAvailable() +amount);
 		
-			bank.attendCommon(2, userId, amount ,null , LocalDate.now(), false);
+			bank.attend(2, userId, amount ,null , LocalDate.now(), false);
 			assertEquals((int)(bank.searchUser(userId).getCurrentAccount().getBalanceAvailable()), total);
 		
-		}else { ////// test for prioritary
-				
-			
 		}
 		
 	}
@@ -210,27 +189,7 @@ public class BankTest {
 			}catch(IndexOutOfBoundsException e) {
 				assertTrue(true, "Everything right");
 			}
-		}else { ////// test for prioritary
-				
-			
 		}
-		
-		//// Second case. The bank have more than one person in the queue
-		bank.addNewTurn();
-		bank.addNewTurn();
-		bank.addNewTurn();
-		
-		/**
-		 * if(bank.getCommonList().size()>0) { ///test for commons
-			String userId=bank.getCommonList().get(0).getId();
-			bank.deleteUser(userId);
-			try {
-				bank.getCommonList().get(0);
-			}catch(IndexOutOfBoundsException e) {
-				assertTrue(true, "Everything right");
-			}
-		}else { ////// test for prioritary
-		 */			
-		}
+	}
 }
 

@@ -10,7 +10,8 @@ public interface InterfaceHeap <K extends Comparable<K>, V> {
 	HeapNode<K, V>[] heapify(int index);
 	HeapNode<K,V>[] buildHeap();
 	int getArraySize();
-
-	
+	boolean addHeapNode(K key, V value, int priority);
+	boolean insert(HeapNode<K,V> C);
+	HeapNode<K,V> extracMax();
 
 }

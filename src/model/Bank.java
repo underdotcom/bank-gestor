@@ -15,8 +15,9 @@ public class Bank {
 	private InterfaceHashTable<String, User> dataBase;
 	private InterfaceHashTable<String, Desertor> deserters;
 	private InterfaceQueue<Turn> commonTurns;
+	private InterfaceHeap<String, String> prioritaryTurns;
 	
-	private Sort<String> sort;
+	private Sort<User> sort;
 	private RandomGenerator randomData;
 	private ArrayList<User> presentUsersList;
 	private ArrayList<User> commonUser;
@@ -33,6 +34,7 @@ public class Bank {
 		prioritaryUsers=new ArrayList<User>();
 		desertorsList=new ArrayList<Desertor>();
 		commonTurns = new Queue<Turn>();
+		prioritaryTurns= new Heap<String, String>(100,100);
 		randomData= new RandomGenerator(100);
 		index=0;
 		initializeTestCases();
@@ -108,6 +110,7 @@ public class Bank {
 		
 		if(turn.getPriorityValue()>0) {
 			prioritaryUsers.add(dataBase.getValue(turn.getId()));
+			prioritaryTurns.insert(new HeapNode<String, String>(turn.getUser(), turn.getId(), turn.getPriorityValue()));
 		}else {
 			commonUser.add(dataBase.getValue(turn.getId()));
 			commonTurns.enqueue(turn);
@@ -115,7 +118,7 @@ public class Bank {
 		presentUsersList.add(dataBase.getValue(turn.getId()));
 	}
 	
-	public boolean attendCommon(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
+	public boolean attend(int option, String id, double amount, String cancelationReason, LocalDate cancelationDate,boolean cash) {
 		if(option==1) {
 			return withdrawals(id, amount);
 		}else if(option==2) {
@@ -129,8 +132,16 @@ public class Bank {
 		}
 	}
 	
-	public void attendSpecial(int option) {
-		//Erase from the Heap	
+	public void deletePrioritaryUser(int option) {
+		boolean delete = false;
+		User aux=prioritaryUsers.get(0);
+		prioritaryUsers.remove(0);
+		for (int i = 0; i < presentUsersList.size() && !delete; i++) {
+			if(presentUsersList.get(i).getId().equals(aux.getId())) {
+				presentUsersList.remove(i);
+				delete = true;
+			}
+		}
 	}
 	
 	public void deleteUser(String id) {
@@ -145,17 +156,17 @@ public class Bank {
 		}
 	}
 	
-	public void mergeSort(ArrayList<String> list) {
-		sort = new MergeSort<String>();
+	public void mergeSort(ArrayList<User> list) {
+		sort = new MergeSort<User>();
 		sort.sortAscending(list);
 	}
 	
-	public void bubbleSort(ArrayList<String> list) {
-		sort = new BubbleSort<String>();
+	public void bubbleSort(ArrayList<User> list) {
+		sort = new BubbleSort<User>();
 		sort.sortAscending(list);
 	}
 	
-	public void collectionsSort(ArrayList<String> list) {
+	public void collectionsSort(ArrayList<User> list) {
 		Collections.sort(list);
 	}
 	
@@ -180,7 +191,7 @@ public class Bank {
 	}
 	
 	public String getIdPrioritaryClient() {
-		return ""	;
+		return prioritaryUsers.get(0).getId();
 	}
 	
 	public ArrayList<Desertor> getDesertors(){

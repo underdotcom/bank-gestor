@@ -46,27 +46,19 @@
                            <content>
                               <TableView fx:id="dataBase" prefHeight="283.0" prefWidth="582.0">
                                  <columns>
-                                    <TableColumn fx:id="ccColumn" prefWidth="64.0" text="C.C." />
-                                    <TableColumn fx:id="nameColumn" prefWidth="78.0" text="Name" />
-                                    <TableColumn fx:id="accountNumberColumn" prefWidth="83.0" text="Account #" />
-                                    <TableColumn fx:id="connectionDateColumn" prefWidth="101.0" text="Connection Date" />
-                                    <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
-                                    <TableColumn fx:id="payDateColumn" minWidth="0.0" prefWidth="86.0" text="Pay Date" />
-                                    <TableColumn fx:id="cardColumn" minWidth="0.0" prefWidth="0.0" text="Card">
-                                       <columns>
-                                          <TableColumn fx:id="currentColumn" prefWidth="47.0" text="Current" />
-                                          <TableColumn fx:id="creditColumn" prefWidth="39.0" text="Credit" />
-                                       </columns>
-                                    </TableColumn>
+                                    <TableColumn fx:id="ccColumn" prefWidth="89.0" text="C.C." />
+                                    <TableColumn fx:id="nameColumn" prefWidth="104.0" text="Name" />
+                                    <TableColumn fx:id="accountNumberColumn" prefWidth="92.0" text="Account #" />
+                                    <TableColumn fx:id="connectionDateColumn" prefWidth="114.0" text="Connection Date" />
+                                    <TableColumn fx:id="balanceColumn" prefWidth="113.0" text="Balance" />
+                                    <TableColumn fx:id="payDateColumn" minWidth="0.0" prefWidth="57.0" text="Pay Date" />
                                  </columns>
                               </TableView>
                            </content>
                         </ScrollPane>
-                        <ChoiceBox fx:id="criteriaChoiceBox" layoutX="114.0" layoutY="18.0" prefHeight="25.0" prefWidth="101.0" />
-                        <ChoiceBox fx:id="sortChoiceBox" layoutX="315.0" layoutY="18.0" prefHeight="25.0" prefWidth="101.0" />
+                        <ChoiceBox fx:id="sortChoiceBox" layoutX="160.0" layoutY="18.0" prefHeight="25.0" prefWidth="101.0" />
                         <Button fx:id="sortBottom" layoutX="439.0" layoutY="18.0" mnemonicParsing="false" onAction="#clickSort" text="      Sort      " />
-                        <Label layoutX="64.0" layoutY="22.0" text="Criteria:" />
-                        <Label layoutX="228.0" layoutY="22.0" text="Type Sort: " />
+                        <Label layoutX="95.0" layoutY="22.0" text="Type Sort: " />
                      </children>
                   </AnchorPane>
                </content>

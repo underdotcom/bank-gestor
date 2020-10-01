@@ -204,7 +204,17 @@ public class PrimaryPageGUI {
 
     @FXML
     void clickSort(ActionEvent event) {
-    
+    	initialiceTableViews();
+    	
+    	ArrayList<User> dataBaseUsers= bank.getPresentUserList();
+    	if(sortChoiceBox.getValue().equals("Bubble sort")) {
+    		bank.bubbleSort(dataBaseUsers);
+    	}else if(sortChoiceBox.getValue().equals("Collections sort")) {
+    		bank.collectionsSort(dataBaseUsers);
+    	}else if(sortChoiceBox.getValue().equals("Merge sort"))  {
+    		bank.mergeSort(dataBaseUsers);
+    	}
+    	showInformationTable();
     }
 
     @FXML
@@ -214,10 +224,10 @@ public class PrimaryPageGUI {
     		if(withdrawRadioButton.isSelected()==false && consignmentRadioButton.isSelected()==false ) {
     			generateAlert("Please, choose an option", AlertType.ERROR);
     		}else if(withdrawRadioButton.isSelected()) {
-        		bank.attendCommon(1, currentUser.getId(), amount, null, null, false);
+        		bank.attend(1, currentUser.getId(), amount, null, null, false);
         		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}else if(consignmentRadioButton.isSelected()) {
-        		bank.attendCommon(2, currentUser.getId(), amount, null, null, false);
+        		bank.attend(2, currentUser.getId(), amount, null, null, false);
         		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}
     		updateInformation();
@@ -232,7 +242,7 @@ public class PrimaryPageGUI {
     		generateAlert("Please, write the reason of your goodybye", AlertType.ERROR);	
     	}else {
     		updateInformation();
-    		bank.attendCommon(2, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
+    		bank.attend(2, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
     		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
     	}
     }
@@ -243,10 +253,10 @@ public class PrimaryPageGUI {
     		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
     			generateAlert("Please, choose an option", AlertType.ERROR);
     		}else if(cashRadioButton.isSelected()) {
-    			bank.attendCommon(2, currentUser.getId(), 0.0, null, null, true);
+    			bank.attend(2, currentUser.getId(), 0.0, null, null, true);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}else if (savingButton.isSelected()){
-    			bank.attendCommon(3, currentUser.getId(), 0.0, null, null, false);
+    			bank.attend(3, currentUser.getId(), 0.0, null, null, false);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}
     		updateInformation();
@@ -279,6 +289,7 @@ public class PrimaryPageGUI {
     	}else {
     		load("BankSecondPage.fxml");
     		updateInformation();
+    		showInformationTable();
     	}
     }
     
@@ -292,6 +303,8 @@ public class PrimaryPageGUI {
         balanceOwingCreditText.setText( String.valueOf((((CreditCard)currentUser.getCreditCard()).getBalanceOwing())));
         payDateText.setText(((CreditCard) currentUser.getCreditCard()).getPayDate().toString());   
     }
+    
+    
     
     void currentUser(int type) {
     	if(type==0) {
@@ -307,6 +320,7 @@ public class PrimaryPageGUI {
     	backButton.setVisible(false);
 		undoButton.setVisible(false);
     	FXMLLoader fxmlLoader=new FXMLLoader(getClass().getResource("BankPrincipalPage.fxml"));
+    	
     	fxmlLoader.setController(this);
     	Parent parent = fxmlLoader.load();
     	anchorMain.getChildren().clear();
@@ -340,6 +354,7 @@ public class PrimaryPageGUI {
     }
     
     void initialiceTableViews() {
+    	
     	ArrayList<User> commonUser= bank.getCommonList();
     	ArrayList<User> priorityUser= bank.getPrioritayList();
   
@@ -351,5 +366,24 @@ public class PrimaryPageGUI {
     	
     	commonColumn.setCellValueFactory(new PropertyValueFactory<User, String>("Id"));
     	priorityColumn.setCellValueFactory(new PropertyValueFactory<User, String>("Id"));
+ 
+    }
+    
+    void InitialiceChoiceBox() {
+    	sortChoiceBox.setItems(FXCollections.observableArrayList("Bubble sort", "Collections sort", "Merge sort"));
+    }
+    
+    void showInformationTable() {
+    	sortChoiceBox.setItems(FXCollections.observableArrayList("Bubble sort", "Collections sort", "Merge sort"));
+    	ArrayList<User> dataBaseUsers= bank.getPresentUserList();
+    	ObservableList<User> itemsC=FXCollections.observableArrayList(dataBaseUsers);
+    	dataBase.setItems(itemsC);
+    	ccColumn.setCellValueFactory(new PropertyValueFactory<User, String>("Id"));
+    	nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("Name"));
+    	accountNumberColumn.setCellValueFactory(new PropertyValueFactory<User, String>("NumberCount"));
+    	connectionDateColumn.setCellValueFactory(new PropertyValueFactory<User, String>("conection"));
+    	balanceColumn.setCellValueFactory(new PropertyValueFactory<User, String>("AccountB"));
+    	payDateColumn.setCellValueFactory(new PropertyValueFactory<User, String>("getPayDate"));
+    	
     }
 }
