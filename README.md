@@ -69,6 +69,13 @@ In this tab we can see the bank's user database.
 ### Changed
 - README has been update
 
+### [3.0.0] - 2020-10-22
+
+
+### Changed
+- Unit test design has been updated and fixed
+- Desing of test cases have been changed
+
 # ABOUT THE PROGRAM 📩
 
 - _Language:_ Java 8.
