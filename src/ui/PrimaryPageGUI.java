@@ -227,7 +227,8 @@ public class PrimaryPageGUI {
     @FXML
     void acceptClickWC(ActionEvent event) throws IOException {
     	try {
-    		undo.push(bank);
+    		Bank bankC= bank;
+    		undo.push(bankC);
     		double amount= Double.parseDouble(amountCurrent.getText());
     		if(withdrawRadioButton.isSelected()==false && consignmentRadioButton.isSelected()==false ) {
     			generateAlert("Please, choose an option", AlertType.ERROR);
@@ -239,7 +240,6 @@ public class PrimaryPageGUI {
         		 generateAlert("Amount Modificated Succesfully. Do you want to exit?", AlertType.CONFIRMATION);
         	}
     		
-    		updateInformation();
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please", AlertType.ERROR);
     	}
@@ -250,7 +250,8 @@ public class PrimaryPageGUI {
     	if(cancelReasonText.getText().equals("")) {
     		generateAlert("Please, write the reason of your goodybye", AlertType.ERROR);	
     	}else {
-    		undo.push(bank);
+    		Bank bankC= bank;
+    		undo.push(bankC);
     		updateInformation();
     		bank.attend(3, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
     		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
@@ -263,16 +264,17 @@ public class PrimaryPageGUI {
     		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
     			generateAlert("Please, choose an option.", AlertType.ERROR);
     		}else if(cashRadioButton.isSelected()) {
-    			undo.push(bank);
+    			Bank bankC= bank;
+        		undo.push(bankC);
     			bank.attend(4, currentUser.getId(), 0.0, null, null, true);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}else if (savingButton.isSelected()){
-    			undo.push(bank);
+    			Bank bankC= bank;
+        		undo.push(bankC);
     			bank.attend(4, currentUser.getId(), 0.0, null, null, false);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}
-    	
-    		updateInformation();
+  
     	}catch(NumberFormatException e) {
     		generateAlert("Write an amount, please",AlertType.ERROR);
     	}
