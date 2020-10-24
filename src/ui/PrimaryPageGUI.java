@@ -187,6 +187,7 @@ public class PrimaryPageGUI {
 
     public PrimaryPageGUI() throws IOException{
     	bank= new Bank();
+    	undo= new Stack<Bank>();
     	currentUser=null;
     }
     
@@ -204,12 +205,8 @@ public class PrimaryPageGUI {
     @FXML
     void clickAttentPrioritary(ActionEvent event) throws IOException {
     	load("BankSecondPage.fxml");
-    	initializeUndo();
     }
 
-    private void initializeUndo() {
-		undo = new Stack<Bank>();
-	}
 
 	@FXML
     void clickSort(ActionEvent event) {
@@ -230,6 +227,7 @@ public class PrimaryPageGUI {
     @FXML
     void acceptClickWC(ActionEvent event) throws IOException {
     	try {
+    		undo.push(bank);
     		double amount= Double.parseDouble(amountCurrent.getText());
     		if(withdrawRadioButton.isSelected()==false && consignmentRadioButton.isSelected()==false ) {
     			generateAlert("Please, choose an option", AlertType.ERROR);
@@ -252,7 +250,7 @@ public class PrimaryPageGUI {
     	if(cancelReasonText.getText().equals("")) {
     		generateAlert("Please, write the reason of your goodybye", AlertType.ERROR);	
     	}else {
-    		
+    		undo.push(bank);
     		updateInformation();
     		bank.attend(3, currentUser.getId(), 0, cancelReasonText.getText(), LocalDate.now(), false);
     		generateAlert("Account cancelled Succesfully. We are sorry for you goodybye. Do you want to exit?",AlertType.CONFIRMATION);
@@ -265,9 +263,11 @@ public class PrimaryPageGUI {
     		if(cashRadioButton.isSelected()==false && savingButton.isSelected()==false) {
     			generateAlert("Please, choose an option.", AlertType.ERROR);
     		}else if(cashRadioButton.isSelected()) {
+    			undo.push(bank);
     			bank.attend(4, currentUser.getId(), 0.0, null, null, true);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}else if (savingButton.isSelected()){
+    			undo.push(bank);
     			bank.attend(4, currentUser.getId(), 0.0, null, null, false);
     			generateAlert("Pay Sucessful. Do you want to exit?",AlertType.CONFIRMATION);
     		}
@@ -293,10 +293,14 @@ public class PrimaryPageGUI {
 
     @FXML
     void undoClick(ActionEvent event) throws IOException {
-    	if(undo.top()!=null)
+    	if(undo.top()!=null) {
     		bank=undo.pop().getV();
-    	else
+    	updateInformation();
+    	}
+    	else {
     		generateAlert("Undo is empty", AlertType.ERROR);
+    	}
+    		
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////

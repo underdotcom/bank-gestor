@@ -71,6 +71,8 @@ In this tab we can see the bank's user database.
 
 ### [3.0.0] - 2020-10-22
 
+### Added
+- The engineering method was added
 
 ### Changed
 - Unit test design has been updated and fixed

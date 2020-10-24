@@ -116,10 +116,10 @@ public class Heap <K extends Comparable<K>, V> implements InterfaceHeap <K,V>{
 			array[father(index)]=aux;
 			index=father(index);
 		}
+		array[index]=C;
 		}catch(NullPointerException e) {
 			
 		}
-		array[index]=C;
 		return false;
 	}
 	
