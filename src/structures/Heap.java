@@ -109,13 +109,16 @@ public class Heap <K extends Comparable<K>, V> implements InterfaceHeap <K,V>{
 		heapSize= heapSize+1;
 		int index=heapSize;
 		
+		try {
 		while(index>1 && array[father(index)].getKey().compareTo(C.getKey())>0) {
 			HeapNode<K,V> aux=array[index];
 			array[index]=array[father(index)];
 			array[father(index)]=aux;
 			index=father(index);
 		}
-		
+		}catch(NullPointerException e) {
+			
+		}
 		array[index]=C;
 		return false;
 	}
